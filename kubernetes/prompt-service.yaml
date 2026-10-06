@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prompt-service
+  labels:
+    app: prompt-service
+    part: prompt-engineering
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: prompt-service
+  template:
+    metadata:
+      labels:
+        app: prompt-service
+    spec:
+      containers:
+      - name: prompt-service
+        image: prompt-service:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: PROMPT_REGISTRY_URL
+          value: "http://prompt-registry:8081"
+        - name: FEATURE_FLAG_URL
+          value: "http://feature-flags:8082"
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "512Mi"
+          limits:
+            cpu: "2"
+            memory: "2Gi"
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prompt-service
+spec:
+  selector:
+    app: prompt-service
+  ports:
+  - port: 80
+    targetPort: 8080
+  type: ClusterIP

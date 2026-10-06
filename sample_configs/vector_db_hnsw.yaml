@@ -1,0 +1,20 @@
+# HNSW configuration for a medium-scale (10M) collection
+vector_db:
+  type: qdrant
+  collection: episode14_demo
+  vector_size: 1536
+  distance: cosine
+
+hnsw:
+  M: 32
+  ef_construction: 200
+  ef_search: 128
+
+quantization:
+  scalar: int8
+
+filtering:
+  payload_indexes:
+    - user_id
+    - source
+    - created_at

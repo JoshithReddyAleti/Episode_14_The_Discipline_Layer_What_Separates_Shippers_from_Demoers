@@ -1,0 +1,14 @@
+# DSPy compilation config
+lm:
+  model: openai/gpt-4o-mini
+  temperature: 0.2
+
+optimizer:
+  name: BootstrapFewShotWithRandomSearch
+  metric: exact_match
+  max_bootstrapped_demos: 4
+  max_labeled_demos: 4
+  num_candidate_programs: 10
+
+train_val_split: 0.8
+seed: 42

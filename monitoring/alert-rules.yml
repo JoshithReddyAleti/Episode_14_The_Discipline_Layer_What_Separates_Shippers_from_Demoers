@@ -1,0 +1,68 @@
+groups:
+- name: llm_security
+  rules:
+  - alert: HighInjectionDetectionRate
+    expr: rate(llm_input_injection_detected_total[5m]) > 0.05
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Elevated prompt injection rate"
+      description: "Injection detection rate above 5% for 10 minutes."
+
+  - alert: PIIInOutput
+    expr: rate(llm_output_pii_detected_total[5m]) > 0
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      summary: "PII detected in LLM output"
+      description: "LLM output pipeline emitted PII; investigate immediately."
+
+  - alert: JailbreakBypassed
+    expr: rate(llm_safety_filter_bypass_total[5m]) > 0
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Safety filter bypassed"
+
+- name: experiments
+  rules:
+  - alert: GuardrailBreach
+    expr: experiment_guardrail_breach == 1
+    for: 15m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Guardrail metric breached during experiment"
+      description: "Experiment {{ $labels.experiment_id }} guardrail {{ $labels.metric }} breached threshold."
+
+  - alert: SampleRatioMismatch
+    expr: abs(experiment_traffic_ratio - 0.5) > 0.02
+    for: 30m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Experiment SRM detected"
+      description: "Traffic ratio for {{ $labels.experiment_id }} outside expected range."
+
+- name: data_pipelines
+  rules:
+  - alert: PipelineFailure
+    expr: pipeline_last_run_status != 1
+    for: 1h
+    labels:
+      severity: warning
+    annotations:
+      summary: "Pipeline failed"
+      description: "Pipeline {{ $labels.pipeline }} last run did not succeed."
+
+  - alert: IndexFreshnessLag
+    expr: (time() - index_last_update_timestamp) > 3600
+    for: 15m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Index falling behind source"
+      description: "Index {{ $labels.index }} has not updated in over an hour."

@@ -1,0 +1,42 @@
+# A/B experiment configuration
+experiment_id: prompt_v3_vs_v2
+owner: joshith
+start_date: 2026-08-01
+end_date: 2026-08-14
+
+allocation:
+  control: 50
+  treatment: 50
+
+randomization:
+  unit: user_id
+
+metrics:
+  primary:
+    name: task_success_rate
+    type: proportion
+    baseline: 0.72
+  secondary:
+    - name: llm_judge_score
+      type: mean
+    - name: avg_response_length
+      type: mean
+  guardrails:
+    - name: latency_p95_ms
+      threshold_relative: 1.2
+    - name: cost_per_query_usd
+      threshold_relative: 1.5
+    - name: content_moderation_flag_rate
+      threshold_relative: 2.0
+
+sample_size:
+  per_arm: 7700
+  alpha: 0.05
+  power: 0.80
+  mde: 0.02
+
+decision_criteria: |
+  Ship if primary metric significant improvement at alpha=0.05
+  AND no guardrail breach.
+  Iterate if primary metric neutral, guardrails ok.
+  Kill if primary metric significant regression OR any guardrail breach.

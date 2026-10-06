@@ -1,0 +1,40 @@
+{
+  "dashboard": {
+    "title": "Episode 14 — The Discipline Layer",
+    "panels": [
+      {
+        "title": "Injection Detection Rate",
+        "type": "graph",
+        "targets": [{"expr": "rate(llm_input_injection_detected_total[5m])"}]
+      },
+      {
+        "title": "Output PII Detections",
+        "type": "graph",
+        "targets": [{"expr": "rate(llm_output_pii_detected_total[5m])"}]
+      },
+      {
+        "title": "Experiment Guardrail Status",
+        "type": "stat",
+        "targets": [{"expr": "experiment_guardrail_breach"}]
+      },
+      {
+        "title": "Pipeline Freshness (seconds behind)",
+        "type": "gauge",
+        "targets": [{"expr": "time() - index_last_update_timestamp"}]
+      },
+      {
+        "title": "Vector DB QPS by Collection",
+        "type": "graph",
+        "targets": [{"expr": "sum by (collection) (rate(vector_db_query_total[1m]))"}]
+      },
+      {
+        "title": "LLM Judge Score P50/P95",
+        "type": "graph",
+        "targets": [
+          {"expr": "histogram_quantile(0.50, rate(llm_judge_score_bucket[10m]))"},
+          {"expr": "histogram_quantile(0.95, rate(llm_judge_score_bucket[10m]))"}
+        ]
+      }
+    ]
+  }
+}

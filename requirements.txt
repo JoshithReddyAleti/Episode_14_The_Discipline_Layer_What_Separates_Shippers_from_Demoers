@@ -1,0 +1,39 @@
+# Core
+pydantic>=2.6
+pyyaml>=6.0
+numpy>=1.26
+scipy>=1.12
+statsmodels>=0.14
+pandas>=2.2
+
+# LLM SDKs (uncomment as needed)
+# openai>=1.30
+# anthropic>=0.30
+# google-generativeai>=0.8
+
+# Prompt engineering
+# dspy-ai>=2.5
+# instructor>=1.0
+# outlines>=0.1
+# xgrammar
+# guidance>=0.2
+# lm-format-enforcer>=0.10
+# llmlingua>=0.3
+
+# Data engineering
+datasketch>=1.6
+# qdrant-client>=1.10
+# weaviate-client>=4.6
+# lancedb>=0.10
+# dvc>=3.50
+# deltalake>=0.20
+
+# Security / red teaming (install per need)
+# garak
+# pyrit
+# promptfoo
+
+# Observability
+# langfuse>=2.40
+# prometheus-client>=0.20
+# opentelemetry-sdk>=1.25
