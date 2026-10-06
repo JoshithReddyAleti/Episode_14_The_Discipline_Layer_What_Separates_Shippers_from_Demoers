@@ -1,0 +1,21 @@
+# Configuration for Model A/B Testing Platform — Compare 3 Models
+lab_name: model_ab_testing_platform
+version: 1.0
+
+# Adjust for your target model / provider
+model:
+  provider: openai
+  name: gpt-4o-mini
+  temperature: 0.2
+
+# Data settings
+data:
+  input_path: ./inputs
+  output_path: ./outputs
+  sample_size: 100
+
+# Runtime
+runtime:
+  batch_size: 10
+  max_workers: 4
+  timeout_seconds: 60
